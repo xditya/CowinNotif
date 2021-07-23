@@ -46,29 +46,28 @@ async def processes():  # sourcery no-metrics
             await bot.send_message(i, "Bot Started.")
         while True:
             today = datetime.today().strftime("%d-%m-%Y")
-            base_url = "https://cdn-api.co-vin.in/api/v2/appointment/js/public/calendarByPin?pincode={}&date={}".format(
+            base_url = "https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/findByPin?pincode={}&date={}".format(
                 pincode, today
             )
             res = get(base_url)
             if res.status_code == 200:
                 json = res.json()
-                if json["is"]:
+                if json["secrets"]:
                     msg = ""
-                    for i in json["is"]:
-                        for j in i["js"]:
-                            if (
-                                j["min_age_limit"] <= age
-                                and j["available_capacity"] > 0
-                            ):
-                                msg += f"**Centre**: {i['name']}\n"
-                                msg += f"**Block**: {i['block_name']}\n"
-                                msg += f"**Price**: {i['fee_type']}\n"
-                                msg += f"**Availablity**: {j['available_capacity']}\n"
-                                if j["vaccine"] != "":
-                                    msg += f"**Vaccine type**: {j['vaccine']}"
-                                if msg != "":
-                                    for i in auth:
-                                        await bot.send_message(i, msg)
+                    for i in json["secrets"]:
+                        if (
+                            i["min_age_limit"] <= age
+                            and i["available_capacity"] > 0
+                        ):
+                            msg += f"**Centre**: {i['name']}\n"
+                            msg += f"**Block**: {i['block_name']}\n"
+                            msg += f"**Price**: {i['fee_type']}\n"
+                            msg += f"**Availablity**: {j['available_capacity']}\n"
+                            if i["vaccine"] != "":
+                                msg += f"**Vaccine type**: {j['vaccine']}"
+                            if msg != "":
+                                for i in auth:
+                                    await bot.send_message(i, msg)
 
 
 bot.loop.run_until_complete(processes())
