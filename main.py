@@ -55,7 +55,7 @@ async def processes():  # sourcery no-metrics
             if json["sessions"]:
                 for i in json["sessions"]:
                     if (
-                        i["min_age_limit"] <= age
+                        i["min_age_limit"] >= age
                         and i["available_capacity"] > 0
                     ):
                         msg += f"**Centre**: {i['name']}\n"
