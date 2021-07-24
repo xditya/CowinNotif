@@ -63,13 +63,10 @@ async def processes():  # sourcery no-metrics
                         msg += f"**Price**: {i['fee_type']}\n"
                         msg += f"**Availablity**: {i['available_capacity']}\n"
                         if i["vaccine"] != "":
-                            msg += f"**Vaccine type**: {i['vaccine']}"
+                            msg += f"**Vaccine type**: {i['vaccine']}\n\n"
         if msg != "":
-            to_send = msg
-        else:
-            to_send = "**No vaccine Available**"
-        for user in auth:
-            await bot.send_message(user, to_send)
+            for user in auth:
+                await bot.send_message(user, msg)
 
 
 bot.loop.run_until_complete(processes())
